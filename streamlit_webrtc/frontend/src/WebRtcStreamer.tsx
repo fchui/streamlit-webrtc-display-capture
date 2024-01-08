@@ -38,7 +38,6 @@ const WebRtcStreamerInner: React.VFC<WebRtcStreamerInnerProps> = (props) => {
     deviceIds.video,
     deviceIds.audio,
     props.onComponentValueChange,
-    setDeviceIds
   );
 
   const mode = props.mode;

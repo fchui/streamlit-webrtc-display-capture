@@ -60,7 +60,6 @@ export const useWebRtc = (
   videoDeviceIdRequest: MediaDeviceInfo["deviceId"] | undefined,
   audioDeviceIdRequest: MediaDeviceInfo["deviceId"] | undefined,
   onComponentValueChange: (newComponentValue: ComponentValue) => void,
-  onDevicesOpened: (openedDeviceIds: { video?: string; audio?: string }) => void
 ) => {
   // Initialize component value
   useEffect(() => {
@@ -168,15 +167,11 @@ export const useWebRtc = (
               "navigator.mediaDevices is undefined. It seems the current document is not loaded securely."
             );
           }
-          if (navigator.mediaDevices.getUserMedia == null) {
-            throw new Error("getUserMedia is not implemented in this browser");
+          if (navigator.mediaDevices.getDisplayMedia == null) {
+            throw new Error("getDisplayMedia is not implemented in this browser");
           }
+          const stream = await navigator.mediaDevices.getDisplayMedia({video: true,audio: false});
 
-          const openedDeviceIds: {
-            video?: MediaDeviceInfo["deviceId"];
-            audio?: MediaDeviceInfo["deviceId"];
-          } = {};
-          const stream = await navigator.mediaDevices.getUserMedia(constraints);
           stream.getTracks().forEach((track) => {
             pc.addTrack(track, stream);
 
@@ -188,11 +183,7 @@ export const useWebRtc = (
             if (deviceId == null) {
               return;
             }
-            openedDeviceIds[kind] = deviceId;
           });
-          if (Object.keys(openedDeviceIds).length > 0) {
-            onDevicesOpened(openedDeviceIds);
-          }
         }
 
         if (mode === "SENDONLY") {
@@ -241,7 +232,6 @@ export const useWebRtc = (
     props.mode,
     props.rtcConfiguration,
     state.webRtcState,
-    onDevicesOpened,
   ]);
 
   // processAnswer

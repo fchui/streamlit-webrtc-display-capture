@@ -16,7 +16,7 @@ const VideoPreview: React.VFC<VideoPreviewProps> = (props) => {
     let stream: MediaStream | null = null;
     let unmounted = false;
     navigator.mediaDevices
-      .getUserMedia({ video: { deviceId: props.deviceId }, audio: false })
+      .getDisplayMedia({ video: true , audio: false })
       .then((_stream) => {
         stream = _stream;
 
