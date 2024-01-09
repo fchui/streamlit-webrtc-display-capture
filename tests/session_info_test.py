@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 
-from streamlit_webrtc.server import VER_GTE_1_12_0
-from streamlit_webrtc.session_info import SessionInfo, get_script_run_count
+from streamlit_webrtc_display_capture.server import VER_GTE_1_12_0
+from streamlit_webrtc_display_capture.session_info import SessionInfo, get_script_run_count
 
 
 def test_get_script_run_count():

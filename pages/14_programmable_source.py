@@ -5,7 +5,7 @@ import av
 import cv2
 import numpy as np
 import streamlit as st
-from streamlit_webrtc import WebRtcMode, create_video_source_track, webrtc_streamer
+from streamlit_webrtc_display_capture import WebRtcMode, create_video_source_track, webrtc_streamer
 
 thickness = st.slider("thickness", 1, 10, 3, 1)
 

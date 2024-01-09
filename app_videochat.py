@@ -13,7 +13,7 @@ import numpy as np
 import streamlit as st
 from streamlit_server_state import server_state, server_state_lock
 
-from streamlit_webrtc import (
+from streamlit_webrtc_display_capture import (
     VideoProcessorBase,
     WebRtcMode,
     WebRtcStreamerContext,
