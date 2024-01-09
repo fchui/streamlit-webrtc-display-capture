@@ -2,7 +2,7 @@ import av
 import numpy as np
 import pydub
 import streamlit as st
-from streamlit_webrtc import WebRtcMode, webrtc_streamer
+from streamlit_webrtc_display_capture import WebRtcMode, webrtc_streamer
 
 from sample_utils.turn import get_ice_servers
 

@@ -22,7 +22,6 @@ import DeviceNotAvailableMessage from "./components/messages/DeviceNotAvailableM
 import VoidVideoPreview from "./components/VoidVideoPreview";
 import Defer from "./components/Defer";
 import VideoPreview from "./VideoPreview";
-import { stopAllTracks } from "./utils";
 
 function ensureValidSelection(
   devices: MediaDeviceInfo[],
@@ -160,21 +159,6 @@ const DeviceSelect: React.VFC<DeviceSelectProps> = (props) => {
     selectedAudioInputDeviceId: defaultAudioDeviceId,
   });
 
-  // Ref: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/ondevicechange#example
-  const updateDeviceList = useCallback(() => {
-    if (typeof navigator?.mediaDevices?.enumerateDevices !== "function") {
-      deviceSelectionDispatch({ type: "SET_UNAVAILABLE" });
-      return;
-    }
-
-    return navigator.mediaDevices.enumerateDevices().then((devices) => {
-      deviceSelectionDispatch({
-        type: "UPDATE_DEVICES",
-        devices,
-      });
-    });
-  }, []);
-
   // These values are passed to inside the useEffect below via a ref
   // because they are used there only for UX improvement
   // and should not be added to the dependency list to avoid triggering re-execution.
@@ -186,51 +170,27 @@ const DeviceSelect: React.VFC<DeviceSelectProps> = (props) => {
     video: defaultVideoDeviceId,
     audio: defaultAudioDeviceId,
   };
-  // Call `getUserMedia()` to ask the user for the permission.
+  // Call `getDisplayMedia()` to ask the user for the permission.
   useEffect(() => {
-    if (typeof navigator?.mediaDevices?.getUserMedia !== "function") {
+    if (typeof navigator?.mediaDevices?.getDisplayMedia !== "function") {
       deviceSelectionDispatch({ type: "SET_UNAVAILABLE" });
       return;
     }
-
     setPermissionState("WAITING");
 
-    const { video: videoDeviceId, audio: audioDeviceId } =
-      defaultDeviceIdsRef.current;
-    navigator.mediaDevices
-      .getUserMedia({
-        // Specify the target devices if the user already selected specific ones.
-        // This is not mandatory but beneficial for better UX
-        // as unused devices are not accessed so that their LED indicators
-        // will not be unnecessarily turned on.
+    navigator.mediaDevices.getDisplayMedia({
         video:
-          useVideo && videoDeviceId ? { deviceId: videoDeviceId } : useVideo,
+          true,
         audio:
-          useAudio && audioDeviceId ? { deviceId: audioDeviceId } : useAudio,
+          true,
       })
       .then(async (stream) => {
-        stopAllTracks(stream);
-
-        await updateDeviceList();
-
         setPermissionState("ALLOWED");
       })
       .catch((err) => {
         setPermissionState(err);
       });
-  }, [useVideo, useAudio, updateDeviceList]);
-
-  // Set up the ondevicechange event handler
-  useEffect(() => {
-    const handleDeviceChange = () => updateDeviceList();
-    navigator.mediaDevices.ondevicechange = handleDeviceChange;
-
-    return () => {
-      if (navigator.mediaDevices.ondevicechange === handleDeviceChange) {
-        navigator.mediaDevices.ondevicechange = null;
-      }
-    };
-  }, [updateDeviceList]);
+  }, [useVideo, useAudio]);
 
   const handleVideoInputChange = useCallback<
     NonNullable<NativeSelectProps["onChange"]>

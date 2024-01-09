@@ -1,4 +1,4 @@
-from streamlit_webrtc import webrtc_streamer
+from streamlit_webrtc_display_capture import webrtc_streamer
 
 from sample_utils.turn import get_ice_servers
 

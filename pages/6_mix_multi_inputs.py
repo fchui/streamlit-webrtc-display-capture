@@ -10,7 +10,7 @@ import av
 import cv2
 import numpy as np
 import streamlit as st
-from streamlit_webrtc import (
+from streamlit_webrtc_display_capture import (
     WebRtcMode,
     create_mix_track,
     create_process_track,

@@ -13,7 +13,7 @@ import numpy as np
 import pydub
 import streamlit as st
 
-from streamlit_webrtc import WebRtcMode, webrtc_streamer
+from streamlit_webrtc_display_capture import WebRtcMode, webrtc_streamer
 
 HERE = Path(__file__).parent
 

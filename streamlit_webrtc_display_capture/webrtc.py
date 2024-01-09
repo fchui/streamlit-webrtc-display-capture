@@ -6,7 +6,7 @@ import queue
 import threading
 from typing import Callable, Generic, Optional, Union, cast
 
-from streamlit_webrtc.shutdown import SessionShutdownObserver
+from streamlit_webrtc_display_capture.shutdown import SessionShutdownObserver
 
 try:
     from typing import Literal
