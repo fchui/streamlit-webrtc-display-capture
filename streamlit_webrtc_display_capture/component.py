@@ -17,7 +17,7 @@ from typing import (
 
 from aiortc.mediastreams import MediaStreamTrack
 
-from streamlit_webrtc.models import (
+from streamlit_webrtc_display_capture.models import (
     AudioFrameCallback,
     MediaEndedCallback,
     QueuedAudioFramesCallback,
